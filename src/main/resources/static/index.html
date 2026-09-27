@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="轻量外卖点餐系统">
+    <title>小南外卖</title>
+    <link rel="icon" href="/images/logo.png">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header class="site-header">
+    <a class="brand" href="/">
+        <img src="/images/logo.png" alt="小南外卖">
+        <span>小南外卖</span>
+    </a>
+    <nav class="header-actions">
+        <a class="text-button" href="#menu">
+            <i data-lucide="utensils"></i>
+            今日菜单
+        </a>
+        <a class="text-button" href="/admin.html">
+            <i data-lucide="settings"></i>
+            商家后台
+        </a>
+    </nav>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-kicker">今日现做 · 附近配送</span>
+            <h1>热乎饭，准时到。</h1>
+            <p>选择喜欢的菜品，填写配送信息，商家会在后台收到订单。</p>
+            <a class="primary-button" href="#menu">
+                开始点餐
+                <i data-lucide="arrow-down"></i>
+            </a>
+        </div>
+        <div class="hero-note">
+            <i data-lucide="clock-3"></i>
+            <span>营业时间 10:00 - 22:00</span>
+        </div>
+    </section>
+
+    <section class="menu-section" id="menu">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">MENU</span>
+                <h2>今天吃什么</h2>
+            </div>
+            <label class="search-box">
+                <i data-lucide="search"></i>
+                <input id="searchInput" type="search" placeholder="搜索菜品">
+            </label>
+        </div>
+
+        <div class="category-bar" id="categoryBar"></div>
+        <div class="dish-grid" id="dishGrid"></div>
+        <div class="empty-state" id="emptyState" hidden>
+            <i data-lucide="search-x"></i>
+            <p>没有找到符合条件的菜品</p>
+        </div>
+    </section>
+</main>
+
+<button class="cart-bar" id="cartBar" type="button" hidden>
+    <span class="cart-bar-icon">
+        <i data-lucide="shopping-bag"></i>
+        <b id="cartCount">0</b>
+    </span>
+    <span class="cart-bar-total">
+        <small>已选商品</small>
+        <strong id="cartTotal">¥0.00</strong>
+    </span>
+    <span class="cart-bar-action">去结算</span>
+</button>
+
+<div class="drawer-mask" id="drawerMask" hidden></div>
+<aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="drawer-header">
+        <div>
+            <span class="eyebrow">CART</span>
+            <h2>我的购物车</h2>
+        </div>
+        <button class="icon-button" id="closeCartButton" type="button" title="关闭">
+            <i data-lucide="x"></i>
+        </button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="drawer-footer">
+        <div class="total-row">
+            <span>合计</span>
+            <strong id="drawerTotal">¥0.00</strong>
+        </div>
+        <button class="primary-button full-button" id="checkoutButton" type="button">
+            去结算
+            <i data-lucide="arrow-right"></i>
+        </button>
+    </div>
+</aside>
+
+<div class="modal-mask" id="checkoutModal" hidden>
+    <div class="modal">
+        <div class="modal-header">
+            <div>
+                <span class="eyebrow">CHECKOUT</span>
+                <h2>确认配送信息</h2>
+            </div>
+            <button class="icon-button" id="closeCheckoutButton" type="button" title="关闭">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <form id="checkoutForm">
+            <div class="form-grid">
+                <label>
+                    <span>姓名</span>
+                    <input name="customerName" required maxlength="30" placeholder="收货人姓名">
+                </label>
+                <label>
+                    <span>手机号</span>
+                    <input name="phone" required maxlength="20" inputmode="tel" placeholder="联系电话">
+                </label>
+            </div>
+            <label>
+                <span>配送地址</span>
+                <input name="address" required maxlength="120" placeholder="小区、楼栋和门牌号">
+            </label>
+            <label>
+                <span>订单备注</span>
+                <textarea name="remark" maxlength="200" rows="3" placeholder="口味、餐具等要求"></textarea>
+            </label>
+            <div class="checkout-summary">
+                <span>共 <b id="checkoutCount">0</b> 件商品</span>
+                <strong id="checkoutTotal">¥0.00</strong>
+            </div>
+            <button class="primary-button full-button" type="submit">
+                提交订单
+                <i data-lucide="check"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="success-mask" id="successModal" hidden>
+    <div class="success-modal">
+        <span class="success-icon"><i data-lucide="check"></i></span>
+        <h2>下单成功</h2>
+        <p>订单号：<strong id="successOrderNo"></strong></p>
+        <p>商家已经收到你的订单。</p>
+        <button class="primary-button" id="successButton" type="button">继续点餐</button>
+    </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js" defer></script>
+<script src="/js/app.js" defer></script>
+</body>
+</html>

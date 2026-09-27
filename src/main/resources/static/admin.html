@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小南外卖商家后台</title>
+    <link rel="icon" href="/images/logo.png">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="admin-body">
+<div class="login-screen" id="loginScreen">
+    <div class="login-panel">
+        <div class="login-brand">
+            <img src="/images/logo.png" alt="小南外卖">
+            <div>
+                <span class="eyebrow">MERCHANT</span>
+                <h1>商家管理后台</h1>
+            </div>
+        </div>
+        <form id="adminLoginForm">
+            <label>
+                <span>管理员密码</span>
+                <input id="adminPassword" type="password" required autocomplete="current-password" placeholder="请输入密码">
+            </label>
+            <button class="primary-button full-button" type="submit">
+                登录后台
+                <i data-lucide="log-in"></i>
+            </button>
+            <p class="login-hint">默认密码：admin123</p>
+        </form>
+        <a class="back-link" href="/">
+            <i data-lucide="arrow-left"></i>
+            返回用户端
+        </a>
+    </div>
+</div>
+
+<div class="admin-shell" id="adminShell" hidden>
+    <aside class="admin-sidebar">
+        <a class="brand admin-brand" href="/">
+            <img src="/images/logo.png" alt="小南外卖">
+            <span>小南外卖</span>
+        </a>
+        <nav>
+            <button class="admin-nav-button active" data-view="orders" type="button">
+                <i data-lucide="clipboard-list"></i>
+                订单管理
+            </button>
+            <button class="admin-nav-button" data-view="dishes" type="button">
+                <i data-lucide="utensils-crossed"></i>
+                菜品管理
+            </button>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="/" class="admin-nav-button">
+                <i data-lucide="external-link"></i>
+                查看用户端
+            </a>
+            <button class="admin-nav-button" id="logoutButton" type="button">
+                <i data-lucide="log-out"></i>
+                退出登录
+            </button>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-header">
+            <div>
+                <span class="eyebrow">DASHBOARD</span>
+                <h1>今日经营概览</h1>
+            </div>
+            <button class="icon-button mobile-menu-button" id="mobileMenuButton" type="button" title="菜单">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+
+        <section class="stats-grid">
+            <article class="stat-card">
+                <span class="stat-icon orange"><i data-lucide="receipt-text"></i></span>
+                <div><small>全部订单</small><strong id="statOrders">0</strong></div>
+            </article>
+            <article class="stat-card">
+                <span class="stat-icon blue"><i data-lucide="bell-ring"></i></span>
+                <div><small>待接单</small><strong id="statPending">0</strong></div>
+            </article>
+            <article class="stat-card">
+                <span class="stat-icon green"><i data-lucide="badge-yen"></i></span>
+                <div><small>今日收入</small><strong id="statRevenue">¥0.00</strong></div>
+            </article>
+            <article class="stat-card">
+                <span class="stat-icon yellow"><i data-lucide="chef-hat"></i></span>
+                <div><small>菜品数量</small><strong id="statDishes">0</strong></div>
+            </article>
+        </section>
+
+        <section class="admin-view" id="ordersView">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>订单列表</h2>
+                    <p>查看配送信息并更新订单状态。</p>
+                </div>
+                <button class="secondary-button" id="refreshOrdersButton" type="button">
+                    <i data-lucide="refresh-cw"></i>
+                    刷新
+                </button>
+            </div>
+            <div class="order-list" id="orderList"></div>
+            <div class="empty-state admin-empty" id="orderEmpty" hidden>
+                <i data-lucide="clipboard-x"></i>
+                <p>暂时还没有订单</p>
+            </div>
+        </section>
+
+        <section class="admin-view" id="dishesView" hidden>
+            <div class="admin-section-heading">
+                <div>
+                    <h2>菜品列表</h2>
+                    <p>维护名称、价格、分类和上架状态。</p>
+                </div>
+                <button class="primary-button" id="addDishButton" type="button">
+                    <i data-lucide="plus"></i>
+                    新增菜品
+                </button>
+            </div>
+            <div class="table-wrap">
+                <table class="dish-table">
+                    <thead>
+                    <tr>
+                        <th>菜品</th>
+                        <th>分类</th>
+                        <th>价格</th>
+                        <th>状态</th>
+                        <th>排序</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dishTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div class="modal-mask" id="dishModal" hidden>
+    <div class="modal wide-modal">
+        <div class="modal-header">
+            <div>
+                <span class="eyebrow">DISH</span>
+                <h2 id="dishModalTitle">新增菜品</h2>
+            </div>
+            <button class="icon-button" id="closeDishModalButton" type="button" title="关闭">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <form id="dishForm">
+            <input name="id" type="hidden">
+            <div class="form-grid">
+                <label>
+                    <span>菜品名称</span>
+                    <input name="name" required maxlength="60" placeholder="例如：招牌牛肉饭">
+                </label>
+                <label>
+                    <span>分类</span>
+                    <input name="category" required maxlength="30" placeholder="例如：热销">
+                </label>
+            </div>
+            <label>
+                <span>菜品描述</span>
+                <textarea name="description" rows="2" maxlength="200" placeholder="口味、份量和主要食材"></textarea>
+            </label>
+            <div class="form-grid">
+                <label>
+                    <span>价格（元）</span>
+                    <input name="price" required type="number" min="0.01" step="0.01" placeholder="28.00">
+                </label>
+                <label>
+                    <span>排序</span>
+                    <input name="sortOrder" type="number" min="0" value="0">
+                </label>
+            </div>
+            <label>
+                <span>图片地址</span>
+                <input name="imageUrl" maxlength="200" placeholder="/images/dish-1.jpg">
+            </label>
+            <label class="switch-line">
+                <input name="available" type="checkbox" checked>
+                <span>上架销售</span>
+            </label>
+            <button class="primary-button full-button" type="submit">
+                保存菜品
+                <i data-lucide="save"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="toast" id="adminToast" role="status"></div>
+
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js" defer></script>
+<script src="/js/admin.js" defer></script>
+</body>
+</html>
